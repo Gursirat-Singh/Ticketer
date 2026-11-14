@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --seat-regular: #8f8c96;
+  --seat-gold: #d9a441;
+  --seat-premium: #9d8cf2;
+}
+
+html { scroll-padding-top: 5rem; }
+body {
+  @apply bg-ink-950 font-sans text-paper antialiased;
+  min-height: 100vh;
+}
+h1, h2, h3, .font-display { font-family: 'Big Shoulders Display', Impact, sans-serif; letter-spacing: 0.01em; }
+:focus-visible { outline: 2px solid #ff3d4f; outline-offset: 2px; }
+::selection { background: #e8283a; color: white; }
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary { @apply bg-accent text-white hover:bg-accent-hover; }
+  .btn-ghost { @apply border border-ink-600 text-paper hover:bg-ink-800; }
+  .btn-danger { @apply border border-accent/50 text-accent hover:bg-accent/10; }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .input {
+    @apply w-full rounded-lg border border-ink-600 bg-ink-900 px-3.5 py-2.5 text-sm text-paper placeholder:text-paper-mute
+      focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent;
+  }
+  .label { @apply mb-1.5 block text-sm font-medium text-paper-dim; }
+  .panel { @apply rounded-2xl border border-ink-700 bg-ink-900; }
+  .chip { @apply inline-flex items-center rounded-full border border-ink-600 px-2.5 py-0.5 text-xs text-paper-dim; }
+  .table-th { @apply whitespace-nowrap px-4 py-3 text-left text-xs font-semibold text-paper-mute; }
+  .table-td { @apply px-4 py-3 align-middle text-sm; }
+}
+
+/* ---------- Seat map (the one place we spend the visual budget) ---------- */
+.screen-glow {
+  position: relative;
+  height: 54px;
+  margin: 0 auto;
+  width: min(86%, 560px);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(to bottom, rgba(255, 244, 235, 0.55), rgba(255, 244, 235, 0.03));
+  clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 -10px 28px rgba(255, 220, 190, 0.35));
+}
+.seat {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.45rem 0.45rem 0.25rem 0.25rem;
+  border: 1.5px solid var(--seat-color, var(--seat-regular));
+  color: var(--seat-color, var(--seat-regular));
+  background: transparent;
+  font-size: 0.6rem;
+  font-weight: 600;
+  line-height: 1;
+  transition: background-color 120ms, transform 120ms, color 120ms;
+}
+@media (min-width: 640px) { .seat { width: 2rem; height: 2rem; font-size: 0.65rem; } }
+.seat[data-category='REGULAR'] { --seat-color: var(--seat-regular); }
+.seat[data-category='GOLD'] { --seat-color: var(--seat-gold); }
+.seat[data-category='PREMIUM'] { --seat-color: var(--seat-premium); }
+.seat[data-state='AVAILABLE']:hover { background: color-mix(in srgb, var(--seat-color) 22%, transparent); transform: translateY(-1px); }
+.seat[data-state='SELECTED'] { background: #e8283a; border-color: #e8283a; color: #fff; }
+.seat[data-state='MINE'] { background: #e8283a; border-color: #ff8a95; color: #fff; box-shadow: 0 0 0 2px rgba(232, 40, 58, 0.35); }
+.seat[data-state='BOOKED'] {
+  background: #25252b; border-color: #25252b; color: #4b4b55; cursor: not-allowed;
+  background-image: linear-gradient(45deg, transparent 45%, #3a3a43 45%, #3a3a43 55%, transparent 55%),
+                    linear-gradient(-45deg, transparent 45%, #3a3a43 45%, #3a3a43 55%, transparent 55%);
+}
+.seat[data-state='HELD'] {
+  border-color: #c9892b; color: #c9892b; cursor: not-allowed;
+  background: repeating-linear-gradient(135deg, rgba(201, 137, 43, 0.28) 0 4px, transparent 4px 8px);
+}
+.seat-gap { width: 1.25rem; }
+
+/* One orchestrated entrance: the hero spotlight. Everything else stays still until touched. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-light { animation: lightIn 1.2s ease-out both; }
+  @keyframes lightIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+  .skeleton { animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: 0.55; } }
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }

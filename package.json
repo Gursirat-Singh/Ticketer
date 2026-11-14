@@ -1,0 +1,16 @@
+{
+  "name": "marquee-cinema-booking",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Cinema Hall Ticket Booking System: React + Express + MongoDB + Socket.IO",
+  "scripts": {
+    "setup": "npm --prefix server install && npm --prefix client install",
+    "seed": "npm --prefix server run seed",
+    "dev": "concurrently -n api,web -c red,cyan \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "test": "npm --prefix server test && npm --prefix client test",
+    "build": "npm --prefix client run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
